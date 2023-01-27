@@ -1,22 +1,16 @@
 var findClosestElements = function (arr, k, x) {
-  const res = [];
-  let left = 0,
-    right = arr.length - k;
-
-  // find lowest bound using binary search
-  while (left < right) {
-    const mid = Math.floor((left + right) / 2);
-    const r_distance = arr[mid + k] - x;
-    const l_distance = x - arr[mid];
-
-    // if arr[mid + k] closer to x -> search right half;
-    //if arr[mid] closer to x -> search left half
-    r_distance < l_distance ? (left = mid + 1) : (right = mid);
-  }
-
-  for (let i = left; i < left + k; i++) res.push(arr[i]);
-
-  return res;
+  const closest = (low, high) => {
+    if (low < high) {
+      let mid = (low + high) >> 1; // Math.floor((low+high) / 2)
+      if (x - arr[mid] <= arr[mid + k] - x) return closest(low, mid);
+      else return closest(mid + 1, high);
+    }
+    //when the element doesn't exist
+    else {
+      return arr.slice(low, low + k);
+    }
+  };
+  return closest(0, arr.length - 1);
 };
 
 console.log(findClosestElements([1, 2, 3, 4, 5], 4, 3));
